@@ -1,8 +1,3 @@
-Absolutely — based on your **real folder structure** and past conversations (FastAPI backend + Next.js frontend, integrated with Hume, storing chat/session data, therapist & patient profiles, journaling, etc.), here’s a **polished and accurate `README.md`** tailored to your **Soul Yatri Therapist Booking System** project.
-
----
-
-```md
 # 🧠 Soul Yatri — Therapist Booking & Mental Wellness System
 
 **Soul Yatri** is a full-stack platform that bridges the gap between therapists and patients by offering a seamless booking system, journaling tools, and emotion-aware AI interactions powered by Hume. Built with **FastAPI**, **MongoDB**, and **Next.js**, it supports secure user management, session tracking, and AI-enhanced conversations.
