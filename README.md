@@ -16,6 +16,7 @@
 ---
 
 ## 📁 Folder Structure
+```bash
 soulweb/
 ├── .env
 ├── .eslintrc.json
@@ -73,7 +74,7 @@ soulweb/
 │   ├── fetchWeather.ts
 │   ├── getHumeAccessToken.ts
 │   └── index.ts
-
+```bash
 
 ## 🔌 Backend API – FastAPI
 
