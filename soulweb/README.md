@@ -21,48 +21,48 @@ Absolutely — based on your **real folder structure** and past conversations (F
 ---
 
 ## 📁 Folder Structure
-```
-
+tree /F > structure.txt
+notepad structure.txt
 soul-yatri/
-├── backend/
-│ ├── main.py # FastAPI entry point
-│ ├── routes/
-│ │ ├── user.py # User registration & login
-│ │ ├── therapist.py # Therapist-specific endpoints
-│ │ ├── booking.py # Booking-related routes
-│ │ ├── journal.py # Journal routes
-│ │ └── summary.py # Session summarization
-│ ├── models/
-│ │ └── user.py # Pydantic models
-│ ├── db/
-│ │ └── mongodb.py # MongoDB connection logic
-│ └── utils/
-│ └── hume.py # Hume integration helpers
+├── backend/                         # 🚀 FastAPI backend
+│   ├── main.py                      # FastAPI entry point
+│   ├── routes/                      # All API routes
+│   │   ├── user.py                  # User registration & login
+│   │   ├── therapist.py             # Therapist-specific endpoints
+│   │   ├── booking.py               # Session booking
+│   │   ├── journal.py               # Patient journals
+│   │   └── summary.py               # Session summary via Gemini
+│   ├── models/
+│   │   └── user.py                  # Pydantic models
+│   ├── db/
+│   │   └── mongodb.py               # MongoDB connection logic
+│   └── utils/
+│       └── hume.py                  # Hume EVI integration helpers
 │
-├── frontend/ # Next.js app
-│ ├── pages/
-│ │ ├── index.tsx # Landing page
-│ │ ├── chat.tsx # Chatbot interface
-│ │ ├── booking.tsx # Booking UI
-│ │ └── dashboard.tsx # Therapist Dashboard
-│ ├── components/
-│ │ ├── ChatMessage.tsx # Message bubble
-│ │ ├── StartCall.tsx # Mic input
-│ │ └── Messages.tsx # Message list
-│ ├── lib/
-│ │ └── summarizer.ts # Gemini summarization logic
-│ ├── utils/
-│ │ └── localStorage.ts # Chat history persistence
-│ ├── public/
-│ └── styles/
-│ └── globals.css
+├── frontend/                        # 🌐 Next.js frontend
+│   ├── pages/                       # Routing pages
+│   │   ├── index.tsx               # Landing / home page
+│   │   ├── chat.tsx                # Hume-powered chatbot
+│   │   ├── booking.tsx             # Therapist booking UI
+│   │   └── dashboard.tsx           # Therapist dashboard
+│   ├── components/                 # UI components
+│   │   ├── ChatMessage.tsx         # Message bubble
+│   │   ├── StartCall.tsx           # Mic input with Hume
+│   │   └── Messages.tsx            # Message history list
+│   ├── lib/
+│   │   └── summarizer.ts           # Gemini API summarization logic
+│   ├── utils/
+│   │   └── localStorage.ts         # Chat history (local storage or DB)
+│   ├── public/                     # Static assets (images, icons, etc.)
+│   └── styles/
+│       └── globals.css             # Global styling
 │
-├── requirements.txt # Python dependencies
-├── package.json # Frontend deps
-├── .env # Secrets & config
-└── README.md
+├── requirements.txt                # Python backend dependencies
+├── package.json                    # Next.js frontend dependencies
+├── .env                            # Environment config for backend
+├── .env.local                      # Environment config for frontend
+└── README.md                       # Project overview & instructions
 
-````
 
 ---
 
