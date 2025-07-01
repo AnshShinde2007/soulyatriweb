@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+
+  /* Updated primary colors to use your brand colors */
+  --primary: 29 100% 50%; /* FF7B00 - Orange */
+  --primary-foreground: 0 0% 100%; /* White text on orange */
+
+  --secondary: 191 73% 42%; /* 18A2B8 - Teal Blue */
+  --secondary-foreground: 0 0% 100%; /* White text on teal */
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 29 100% 50%; /* Updated to use orange for focus rings */
+  --radius: 0.5rem;
+
+  /* Updated chart colors to use your brand palette */
+  --chart-1: 29 100% 50%; /* FF7B00 - Orange */
+  --chart-2: 191 73% 42%; /* 18A2B8 - Teal Blue */
+  --chart-3: 29 100% 60%; /* Lighter orange variant */
+  --chart-4: 191 73% 52%; /* Lighter teal variant */
+  --chart-5: 29 100% 40%; /* Darker orange variant */
+
+  /* Custom brand color variables */
+  --brand-orange: 29 100% 50%; /* FF7B00 */
+  --brand-teal: 191 73% 42%; /* 18A2B8 */
+  --brand-orange-light: 29 100% 60%;
+  --brand-orange-dark: 29 100% 40%;
+  --brand-teal-light: 191 73% 52%;
+  --brand-teal-dark: 191 73% 32%;
+}
+
+/* Dark mode support (optional) */
+.dark {
+  --background: 222.2 47.4% 11.2%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 47.4% 11.2%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 47.4% 11.2%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 29 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 191 73% 42%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 29 100% 50%;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, hsl(var(--brand-orange)), hsl(var(--brand-teal)));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, hsl(var(--brand-orange-dark)), hsl(var(--brand-teal-dark)));
+}
+
+/* Ensure body has proper spacing for fixed navbar */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(var(--brand-orange)), hsl(var(--brand-teal)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Brand gradient backgrounds */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, hsl(var(--brand-orange)), hsl(var(--brand-teal)));
+}
+
+.bg-brand-gradient-reverse {
+  background: linear-gradient(135deg, hsl(var(--brand-teal)), hsl(var(--brand-orange)));
+}
+
+/* Line clamp utility for text truncation */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom focus styles using brand colors */
+.focus-brand:focus {
+  outline: 2px solid hsl(var(--brand-orange));
+  outline-offset: 2px;
+}
+
+/* Button hover effects */
+.btn-brand-hover:hover {
+  background: linear-gradient(135deg, hsl(var(--brand-orange-dark)), hsl(var(--brand-teal-dark)));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsla(var(--brand-orange), 0.3);
+}
+
+/* Card hover effects */
+.card-brand-hover:hover {
+  border-color: hsl(var(--brand-orange));
+  box-shadow: 0 8px 25px hsla(var(--brand-orange), 0.15);
+  transform: translateY(-2px);
+}
+
+/* Animation utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive text utilities */
+@media (max-width: 768px) {
+  .text-responsive-xl {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+}
+
+@media (min-width: 769px) {
+  .text-responsive-xl {
+    font-size: 4rem;
+    line-height: 1.1;
+  }
+}
+
+/* Custom selection colors */
+::selection {
+  background-color: hsla(var(--brand-orange), 0.3);
+  color: hsl(var(--foreground));
+}
+
+::-moz-selection {
+  background-color: hsla(var(--brand-orange), 0.3);
+  color: hsl(var(--foreground));
+}
