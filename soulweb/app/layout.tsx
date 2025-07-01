@@ -1,31 +1,16 @@
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import "./globals.css";
-import { cn } from "@/utils";
+// app/layout.tsx
+import "./globals.css"; // if you're using Tailwind CSS or global styles
+import React from "react";
 
-export const metadata: Metadata = {
-  title: "Hume AI - EVI - Next.js Starter",
-  description: "A Next.js starter using Hume AI's Empathic Voice Interface",
+export const metadata = {
+  title: "SoulYatri",
+  description: "Mental health platform",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          GeistSans.variable,
-          GeistMono.variable,
-          "flex flex-col min-h-screen",
-        )}
-      >
-
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

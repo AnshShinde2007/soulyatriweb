@@ -25,7 +25,7 @@ export const Nav = () => {
     <div className="px-4 py-2 flex items-center h-14 z-50 bg-card border-b border-border">
       <div>
         <Image
-          src="/soullogo.jpg"
+          src="/soullogo.png"
           alt="Soul Yatri Logo"
           width={120}
           height={32}

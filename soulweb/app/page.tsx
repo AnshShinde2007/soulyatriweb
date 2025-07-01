@@ -1,20 +1,25 @@
-import { getHumeAccessToken } from "@/utils/getHumeAccessToken";
-import dynamic from "next/dynamic";
+"use client";
 
-const Chat = dynamic(() => import("@/components/Chat"), {
-  ssr: false,
-});
+import HeroSection from "../components/hero";
+import MentalHealthAppSection from "../components/mentalhealthapp";
+import AboutSection from "../components/about";
+import AppSection from "../components/app";
+import CommunitySection from "../components/community";
+import ContactSection from "../components/contact";
+import Footer from "../components/footer";
 
-export default async function Page() {
-  const accessToken = await getHumeAccessToken();
-
-  if (!accessToken) {
-    throw new Error();
-  }
-
+const LandingPage = () => {
   return (
-    <div className={"grow flex flex-col"}>
-      <Chat accessToken={accessToken} />
-    </div>
+    <main>
+      <HeroSection />
+      <MentalHealthAppSection />
+      <AboutSection />
+      <AppSection />
+      <CommunitySection />
+      <ContactSection />
+      <Footer />
+    </main>
   );
-}
+};
+
+export default LandingPage;
