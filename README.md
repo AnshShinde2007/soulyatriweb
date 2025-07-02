@@ -210,14 +210,3 @@ MIT License – see the `LICENSE` file for more details.
 **Soul Yatri** is more than just a booking platform — it's a mental wellness companion that empowers therapy with emotional intelligence, giving both patients and therapists better tools for healing and connection.
 
 ```
-
----
-
-Let me know if you'd like:
-- A Postman collection
-- Deployment section (Render + Vercel)
-- Database schema diagram
-- Sample `.env` templates for dev/prod
-
-I'll be happy to include those next.
-```
