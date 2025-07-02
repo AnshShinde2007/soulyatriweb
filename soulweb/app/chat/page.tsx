@@ -15,7 +15,6 @@ export default async function BookingPage() {
 
   return (
     <div className="grow flex flex-col">
-      <h1 className="text-2xl font-semibold px-4 py-2">🗓️ Booking Assistant</h1>
       <Chat accessToken={accessToken} />
     </div>
   );

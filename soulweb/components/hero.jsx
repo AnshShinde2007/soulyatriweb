@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import heroImg from "./assets/hero.png"; // Background image
+import heroImg from "@/public/assets/hero.png"; // Background image
 
 const HeroSection = () => {
   return (

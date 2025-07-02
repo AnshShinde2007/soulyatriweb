@@ -1,51 +1,81 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import { Moon, Sun } from "lucide-react";
-import Github from "./logos/GitHub";
-import pkg from "@/package.json";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 
-export const Nav = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+const items = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "App", href: "#app" },
+  { label: "Community", href: "#community" },
+  { label: "Contact", href: "#contact" },
+];
 
-  useLayoutEffect(() => {
-    const el = document.documentElement;
-    setIsDarkMode(el.classList.contains("dark"));
-  }, []);
+const smoothScrollTo = (elementId: string) => {
+  const element = document.getElementById(elementId.replace("#", ""));
+  if (element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+};
 
-  const toggleDark = () => {
-    const el = document.documentElement;
-    el.classList.toggle("dark");
-    setIsDarkMode((prev) => !prev);
+const Navbar = () => {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push("/signup");
   };
 
   return (
-    <div className="px-4 py-2 flex items-center h-14 z-50 bg-card border-b border-border">
-      <div>
-        <Image
-          src="/soullogo.png"
-          alt="Soul Yatri Logo"
-          width={120}
-          height={32}
-          className="h-auto max-h-10 w-auto object-contain"
-        />
-      </div>
-      <div className="ml-auto flex items-center gap-1">
-        <Button
-          onClick={toggleDark}
-          variant="ghost"
-          className="ml-auto flex items-center gap-1.5"
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white px-4 py-4 flex justify-between items-center border-b border-gray-100">
+      {/* Left - Logo */}
+      <div className="flex-1">
+        <Link
+          href="/"
+          className="text-lg md:text-xl font-bold bg-gradient-to-r from-[#FF7B00] to-[#18A2B8] bg-clip-text text-transparent"
         >
-          {isDarkMode ? (
-            <Sun className="size-4" />
-          ) : (
-            <Moon className="size-4" />
-          )}
-          <span>{isDarkMode ? "Light" : "Dark"} Mode</span>
-        </Button>
+          SoulYatri
+        </Link>
       </div>
-    </div>
+
+      {/* Center - Navigation */}
+      <div className="hidden md:flex flex-1 justify-center">
+        <div className="flex space-x-6 lg:space-x-8">
+          {items.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => smoothScrollTo(item.href)}
+              className="text-black hover:text-[#FF7B00] font-medium transition-colors duration-200 px-3 py-2 text-sm lg:text-base"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Right - Buttons */}
+      <div className="flex-1 flex justify-end space-x-2 md:space-x-4">
+        <Link href="/signup">
+          <button className="bg-white text-[#FF7B00] hover:bg-gray-50 px-3 md:px-4 py-2 rounded-md text-xs md:text-sm border-2 border-[#FF7B00] font-medium transition-colors">
+            Sign Up
+          </button>
+        </Link>
+        <button
+          onClick={handleGetStarted}
+          className="bg-gradient-to-r from-[#FF7B00] to-[#18A2B8] hover:from-[#e66a00] hover:to-[#1591a3] text-white px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-medium transition-all"
+        >
+          Get Started
+        </button>
+      </div>
+
+      {/* Mobile Menu Placeholder */}
+      <div className="md:hidden ml-4">{/* Add hamburger if needed */}</div>
+    </nav>
   );
 };
+
+export default Navbar;
