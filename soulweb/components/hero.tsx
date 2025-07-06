@@ -7,7 +7,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="w-full min-h-screen bg-gradient-to-br from-[#FF7B00] to-[#18A2B8] bg-no-repeat bg-center bg-cover text-white py-20 px-4 pt-32"
+      className="w-full min-h-screen bg-gradient-to-br from-[#FF7B00] to-[#18A2B8] bg-no-repeat bg-center bg-cover text-white pt-20 px-4"
       style={{
         backgroundImage: `linear-gradient(135deg, rgba(255, 123, 0, 0.8), rgba(24, 162, 184, 0.8)), url(${heroImg})`,
         backgroundBlendMode: "overlay",

@@ -1,4 +1,4 @@
-// app/booking/page.tsx
+// app/chat/page.tsx
 import { getHumeAccessToken } from "@/utils/getHumeAccessToken";
 import dynamic from "next/dynamic";
 
@@ -6,7 +6,7 @@ const Chat = dynamic(() => import("@/components/Chat"), {
   ssr: false,
 });
 
-export default async function BookingPage() {
+export default async function ChatPage() {
   const accessToken = await getHumeAccessToken();
 
   if (!accessToken) {
