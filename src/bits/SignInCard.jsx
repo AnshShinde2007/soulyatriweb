@@ -1,14 +1,29 @@
 "use client"
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 
 export function SigninCard() {
+  const navigate = useNavigate()
   const [selectedRole, setSelectedRole] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // Simulate signin process
+    setTimeout(() => {
+      if (selectedRole === "therapist") {
+        navigate("/therapist-dashboard")
+      } else if (selectedRole === "admin") {
+        navigate("/admin-dashboard")
+      } else {
+        navigate("/user-dashboard")
+      }
+    }, 1000)
+  }
 
   return (
     <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
@@ -32,7 +47,7 @@ export function SigninCard() {
       </CardHeader>
 
       <CardContent className="px-4 md:px-6">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-3">
             <div className="grid gap-2">
               <Label htmlFor="email" className="text-gray-700 font-medium text-sm md:text-base">
@@ -112,8 +127,9 @@ export function SigninCard() {
         </form>
       </CardContent>
 
-      <CardFooter className="px-4 md:px-6 pb-4 md:pb-6">
+      <CardFooter className="flex-col gap-3 px-4 md:px-6 pb-4 md:pb-6">
         <Button
+          onClick={handleSubmit}
           type="submit"
           className="w-full h-10 md:h-11 bg-gradient-to-r from-[#FF7B00] to-[#18A2B8] hover:from-[#e66a00] hover:to-[#1591a3] text-white font-semibold text-base md:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
         >
