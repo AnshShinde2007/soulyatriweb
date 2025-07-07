@@ -1,8 +1,8 @@
-import React from "react"
-import TherapistVerification from "@/components/Therapistsverification"
+import React from "react";
+import TherapistVerification from "@/components/dashboards/admin/Therapistsverification";
 
 const TherapistVerificationPage = () => {
-  return <TherapistVerification />
-}
+  return <TherapistVerification />;
+};
 
-export default TherapistVerificationPage
+export default TherapistVerificationPage;

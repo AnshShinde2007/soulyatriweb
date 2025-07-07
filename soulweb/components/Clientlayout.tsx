@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Navbar from "@/components/Nav";
+import Navbar from "@/components/Hume/Nav";
 import Footer from "@/components/footer";
 
 export default function LayoutShell({

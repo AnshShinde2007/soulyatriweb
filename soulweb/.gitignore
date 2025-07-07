@@ -18,7 +18,7 @@ out/
 # Firebase
 .firebase/
 .firebaserc
-
+soulyatri.json
 # Vite or other build tools (if any)
 dist/
 build/
