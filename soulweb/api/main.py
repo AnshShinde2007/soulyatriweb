@@ -8,7 +8,7 @@ import requests
 import os
 
 # Firebase Init
-cred = credentials.Certificate("soulyatri.json")
+cred = credentials.Certificate(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
 initialize_app(cred)
 db = firestore.client()
 
