@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import SoulYatriBot from "../../Hume/Chat";
 import TherapistBooking from "./therapyuser";
 import HealingToolbox from "./healingtoolbox";
+import ClientComponent from "../../Hume/Chat";
 
 const UserDashboard = () => {
   const [showSoulYatriBot, setShowSoulYatriBot] = useState(false);
@@ -267,7 +267,7 @@ const UserDashboard = () => {
 
       {/* Modals */}
       {showSoulYatriBot && (
-        <SoulYatriBot onClose={() => setShowSoulYatriBot(false)} />
+        <ClientComponent />
       )}
       {showTherapySession && (
         <TherapistBooking onClose={() => setShowTherapySession(false)} />

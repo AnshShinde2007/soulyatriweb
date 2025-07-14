@@ -7,10 +7,12 @@ import AppSection from "../components/app";
 import CommunitySection from "../components/community";
 import ContactSection from "../components/contact";
 import Footer from "../components/footer";
+import Navbar from "../components/Hume/Nav";
 
 const LandingPage = () => {
   return (
     <main>
+      <Navbar />
       <HeroSection />
       <MentalHealthAppSection />
       <AboutSection />

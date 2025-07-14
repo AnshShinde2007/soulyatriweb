@@ -1,194 +1,124 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
-from model import User, Item, Booking, Journal, AIRequest
-from datetime import datetime
+from model import User, Booking, Journal, AIRequest, LoginRequest, TokenResponse
+from datetime import datetime, timedelta
 from typing import List
-from firebase_admin import credentials, firestore, initialize_app
-import requests
+from firebase_admin import credentials, firestore, initialize_app, auth
+from jose import jwt, JWTError
+from passlib.hash import bcrypt
+from dotenv import load_dotenv
 import os
 
-# Firebase Init
-cred = credentials.Certificate(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
-initialize_app(cred)
+# Load environment variables
+load_dotenv()
+
+# Firebase Initialization
+cred = credentials.Certificate("soulyatri.json")
+firebase_app = initialize_app(cred)
 db = firestore.client()
 
-# FastAPI App
+# FastAPI Setup
 app = FastAPI()
+origins = ["http://localhost:3000", "https://soulyatri.com"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Load Knowledge Base
-with open("knowledge_Base_soulyatri.md", "r", encoding="utf-8") as f:
-    KNOWLEDGE_BASE = f.read()
 
-TOGETHER_API_KEY = os.environ.get("TOGETHER_API_KEY", "tgp_v1_KFMUp7rN189kPSvQBCdhzBnoQqc5XZ3Ox5Zqw2nN48A")
+# JWT Config
+SECRET_KEY = os.getenv("SECRET_KEY", "soul_yatri_secret")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-def serialize_doc(doc):
-    data = doc.to_dict()
-    data["id"] = doc.id
-    return data
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# -------- USERS --------
-@app.post("/users/", response_model=User)
-def create_user(user: User):
-    existing = db.collection("users").where("email", "==", user.email).get()
+def verify_token(token: str = Header(...)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+# Routes
+
+@app.post("/signup")
+async def signup(user: User):
+    users_ref = db.collection("users")
+    existing = users_ref.where("email", "==", user.email).get()
     if existing:
-        raise HTTPException(status_code=400, detail="User already exists")
-    doc_ref = db.collection("users").add(user.dict(exclude={"id"}))
-    user.id = doc_ref[1].id
-    return user
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    hashed_pw = bcrypt.hash(user.password)
+    user_data = user.dict()
+    user_data["password"] = hashed_pw
+    new_user_ref = users_ref.document()
+    new_user_ref.set(user_data)
+    return {"id": new_user_ref.id, "email": user.email, "role": user.role}
 
-@app.post("/login")
-def login(email: str, password: str):
-    users = db.collection("users")
-    query = users.where("email", "==", email).stream()
-    for doc in query:
-        user = doc.to_dict()
-        if user["password"] == password:
-            return {
-                "id": doc.id,
-                "name": user["name"],
-                "email": user["email"],
-                "role": user["role"]
-            }
-    raise HTTPException(status_code=401, detail="Invalid credentials")
+@app.post("/login", response_model=TokenResponse)
+async def login(request: LoginRequest):
+    users_ref = db.collection("users")
+    result = users_ref.where("email", "==", request.email).get()
+    if not result:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
+    user_doc = result[0]
+    user_data = user_doc.to_dict()
+    if not bcrypt.verify(request.password, user_data["password"]):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
-@app.get("/users/", response_model=List[User])
-def get_all_users():
-    docs = db.collection("users").get()
-    return [User(**serialize_doc(doc)) for doc in docs]
+    token_data = {"sub": user_doc.id, "email": user_data["email"], "role": user_data["role"]}
+    token = create_access_token(token_data)
+    return {"access_token": token, "user": {"id": user_doc.id, "email": user_data["email"], "role": user_data["role"]}}
 
-@app.get("/users/{user_id}", response_model=User)
-def get_user(user_id: str):
-    doc = db.collection("users").document(user_id).get()
-    if not doc.exists:
+@app.get("/me")
+async def get_current_user(payload: dict = Depends(verify_token)):
+    user_id = payload.get("sub")
+    role = payload.get("role")
+
+    user_ref = db.collection("users").document(user_id)
+    user_doc = user_ref.get()
+
+    if not user_doc.exists:
         raise HTTPException(status_code=404, detail="User not found")
-    return User(**serialize_doc(doc))
 
-@app.get("/therapists/", response_model=List[User])
-def get_all_therapists():
-    docs = db.collection("users").where("role", "==", "therapist").get()
-    therapists = []
-    for doc in docs:
-        data = doc.to_dict()
-        data["id"] = doc.id
-        data["password"] = ""  # Or None, or just leave it out
-        therapists.append(User(**data))
-    return therapists
+    user_data = user_doc.to_dict()
+    user_data["id"] = user_id
+    return user_data
 
-@app.get("/therapists/{therapist_id}/patients", response_model=List[User])
-def get_patients_for_therapist(therapist_id: str):
-    docs = db.collection("users").where("role", "==", "patient").where("therapist_id", "==", therapist_id).get()
-    return [User(**serialize_doc(doc)) for doc in docs]
+@app.post("/booking")
+async def book_session(booking: Booking):
+    bookings_ref = db.collection("bookings").document()
+    bookings_ref.set(booking.dict())
+    return {"message": "Booking successful"}
 
-# -------- ITEMS --------
-@app.post("/items/", response_model=Item)
-def create_item(item: Item):
-    doc_ref = db.collection("items").add(item.dict(exclude={"id"}))
-    item.id = doc_ref[1].id
-    return item
+@app.get("/bookings")
+async def get_bookings():
+    bookings = db.collection("bookings").get()
+    return [b.to_dict() for b in bookings]
 
-@app.get("/items/", response_model=List[Item])
-def get_all_items():
-    docs = db.collection("items").get()
-    return [Item(**serialize_doc(doc)) for doc in docs]
+@app.post("/journal")
+async def submit_journal(entry: Journal):
+    journals_ref = db.collection("journals").document()
+    journals_ref.set(entry.dict())
+    return {"message": "Journal entry saved"}
 
-@app.get("/items/{item_id}", response_model=Item)
-def get_item(item_id: str):
-    doc = db.collection("items").document(item_id).get()
-    if not doc.exists:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return Item(**serialize_doc(doc))
+@app.get("/journals")
+async def get_journals():
+    journals = db.collection("journals").get()
+    return [j.to_dict() for j in journals]
 
-# -------- BOOKINGS --------
-@app.post("/bookings/", response_model=Booking)
-def create_booking(booking: Booking):
-    bookings = db.collection("bookings") \
-        .where("item_id", "==", booking.item_id) \
-        .where("start_time", "<", booking.end_time.isoformat()) \
-        .where("end_time", ">", booking.start_time.isoformat()) \
-        .get()
+@app.post("/ai")
+async def chat_with_ai(req: AIRequest):
+    return {"response": f"You said: {req.message}"}
 
-    if bookings:
-        raise HTTPException(status_code=400, detail="Time slot already booked")
-
-    booking_dict = booking.dict(exclude={"id"})
-    booking_dict["start_time"] = booking.start_time.isoformat()
-    booking_dict["end_time"] = booking.end_time.isoformat()
-    doc_ref = db.collection("bookings").add(booking_dict)
-    booking.id = doc_ref[1].id
-    return booking
-
-@app.get("/bookings/", response_model=List[Booking])
-def get_all_bookings():
-    docs = db.collection("bookings").get()
-    return [Booking(**serialize_doc(doc)) for doc in docs]
-
-@app.get("/bookings/{booking_id}", response_model=Booking)
-def get_booking(booking_id: str):
-    doc = db.collection("bookings").document(booking_id).get()
-    if not doc.exists:
-        raise HTTPException(status_code=404, detail="Booking not found")
-    return Booking(**serialize_doc(doc))
-
-# -------- JOURNALS --------
-@app.post("/journals/", response_model=Journal)
-def create_journal(journal: Journal):
-    journal_dict = journal.dict(exclude={"id"})
-    journal_dict["created_at"] = datetime.utcnow().isoformat()
-    doc_ref = db.collection("journals").add(journal_dict)
-    journal.id = doc_ref[1].id
-    return journal
-
-@app.get("/journals/", response_model=List[Journal])
-def get_all_journals():
-    docs = db.collection("journals").get()
-    return [Journal(**serialize_doc(doc)) for doc in docs]
-
-# -------- AVAILABILITY --------
-@app.get("/items/{item_id}/availability")
-def check_availability(item_id: str, start_time: datetime, end_time: datetime):
-    conflicts = db.collection("bookings") \
-        .where("item_id", "==", item_id) \
-        .where("start_time", "<", end_time.isoformat()) \
-        .where("end_time", ">", start_time.isoformat()) \
-        .get()
-    return {"available": len(conflicts) == 0}
-
-# -------- AI CHAT --------
-@app.post("/ask-ai")
-def ask_ai(req: AIRequest):
-    system_prompt = f"""
-You are SoulYatriBot, a warm, empathetic mental health assistant. Strictly use the following knowledge base. Don’t invent information.
-
-Knowledge Base:
-\"\"\"
-{KNOWLEDGE_BASE}
-\"\"\"
-"""
-    payload = {
-        "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": req.message}
-        ]
-    }
-
-    headers = {
-        "Authorization": f"Bearer {TOGETHER_API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    response = requests.post("https://api.together.xyz/v1/chat/completions", json=payload, headers=headers)
-
-    if response.status_code != 200:
-        raise HTTPException(status_code=500, detail="AI request failed")
-
-    result = response.json()
-    reply = result["choices"][0]["message"]["content"]
-    return {"reply": reply}
+@app.get("/therapists")
+async def get_therapists():
+    therapists = db.collection("users").where("role", "==", "therapist").get()
+    return [{"id": t.id, **t.to_dict()} for t in therapists]

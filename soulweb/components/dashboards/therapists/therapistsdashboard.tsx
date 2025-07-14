@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TherapistAppointments from "./Therapistsappointment";
 import TherapistSessionRecords from "./therapistssessions";
 import TherapistSettings from "./therapistssettings";
+import axios from "axios";
 
 interface Session {
   id: number;
@@ -21,8 +22,31 @@ interface Inquiry {
   statusColor: string;
 }
 
+interface User {
+  name: string;
+  email: string;
+  role: string;
+  id: string;
+}
+
 const TherapistDashboard = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [user, setUser] = useState<User | null>(null);
+
+  // Fetch authenticated user
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/me", {
+          withCredentials: true,
+        });
+        setUser(res.data);
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const upcomingSessions: Session[] = [
     {
@@ -105,6 +129,7 @@ const TherapistDashboard = (): JSX.Element => {
     );
   };
 
+  // Conditional render for tabs
   if (activeTab === "appointments") {
     return <TherapistAppointments onBack={() => setActiveTab("dashboard")} />;
   }
@@ -125,49 +150,28 @@ const TherapistDashboard = (): JSX.Element => {
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-8">
               <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-              <span className="font-medium text-gray-800">Priya Sharma</span>
+              <span className="font-medium text-gray-800">
+                {user ? user.name : "Loading..."}
+              </span>
             </div>
             <nav className="space-y-2">
-              <button
-                className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "dashboard"
-                    ? "bg-gray-200 font-semibold"
-                    : "hover:bg-gray-100"
-                }`}
-                onClick={() => setActiveTab("dashboard")}
-              >
-                Dashboard
-              </button>
-              <button
-                className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "appointments"
-                    ? "bg-gray-200 font-semibold"
-                    : "hover:bg-gray-100"
-                }`}
-                onClick={() => setActiveTab("appointments")}
-              >
-                Appointments
-              </button>
-              <button
-                className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "session-records"
-                    ? "bg-gray-200 font-semibold"
-                    : "hover:bg-gray-100"
-                }`}
-                onClick={() => setActiveTab("session-records")}
-              >
-                Session Records
-              </button>
-              <button
-                className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "settings"
-                    ? "bg-gray-200 font-semibold"
-                    : "hover:bg-gray-100"
-                }`}
-                onClick={() => setActiveTab("settings")}
-              >
-                Settings
-              </button>
+              {["dashboard", "appointments", "session-records", "settings"].map(
+                (tab) => (
+                  <button
+                    key={tab}
+                    className={`block w-full text-left px-4 py-2 rounded ${
+                      activeTab === tab
+                        ? "bg-gray-200 font-semibold"
+                        : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab
+                      .replace("-", " ")
+                      .replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </button>
+                )
+              )}
             </nav>
           </div>
         </div>

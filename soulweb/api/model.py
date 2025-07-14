@@ -1,38 +1,31 @@
-from pydantic import BaseModel, Field, EmailStr
-from datetime import datetime
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-# ---------- USER ----------
 class User(BaseModel):
-    id: Optional[str] = Field(default=None)
     name: str
     email: EmailStr
-    password: str  # 🔐 password field added
-    role: str  # "therapist" or "patient"
-    therapist_id: Optional[str] = None
+    password: str
+    role: str  # e.g., 'user', 'admin', 'therapist'
 
-# ---------- ITEM ----------
-class Item(BaseModel):
-    id: Optional[str] = Field(default=None)
-    name: str
-    description: str
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
-# ---------- BOOKING ----------
+class TokenResponse(BaseModel):
+    access_token: str
+    user: dict
+
 class Booking(BaseModel):
-    id: Optional[str] = Field(default=None)
-    user_id: str
-    item_id: str
-    start_time: datetime
-    end_time: datetime
-
-# ---------- JOURNAL ----------
-class Journal(BaseModel):
-    id: Optional[str] = Field(default=None)
     user_id: str
     therapist_id: str
-    content: str
-    created_at: Optional[datetime] = None
+    date: str
+    time: str
+    notes: Optional[str] = None
 
-# ---------- AI Request ----------
+class Journal(BaseModel):
+    user_id: str
+    content: str
+    timestamp: Optional[str] = None
+
 class AIRequest(BaseModel):
     message: str

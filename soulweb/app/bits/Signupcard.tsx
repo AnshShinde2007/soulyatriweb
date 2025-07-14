@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation"; // ✅ for navigation in Next.js
-import Link from "next/link"; // ✅ use Next.js Link
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "../../components/ui/button";
 import {
   Card,
@@ -14,31 +14,63 @@ import {
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function SignupCard() {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState<string>("");
+  const [availability, setAvailability] = useState<Date | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    const form = e.currentTarget;
-    const password = (form.elements.namedItem("password") as HTMLInputElement)
-      .value;
-    const confirmPassword = (
-      form.elements.namedItem("confirmPassword") as HTMLInputElement
-    ).value;
+  const form = e.currentTarget;
+  const formData = new FormData(form);
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  const payload: any = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    role: selectedRole,
+    password: password,
+  };
+
+  if (selectedRole === "therapist" && availability) {
+    payload.availability = availability.toISOString(); // Include availability if therapist
+  }
+
+  try {
+    const response = await fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      alert(`Signup failed: ${err.detail || "Unknown error"}`);
       return;
     }
 
-    // Simulate signup process
-    setTimeout(() => {
-      router.push("/dashboard"); // ✅ Next.js router
-    }, 1000);
-  };
+    const data = await response.json();
+    console.log("Signup success:", data);
+    router.push("/dashboard"); // Or to login page
+  } catch (err) {
+    console.error("Signup error:", err);
+    alert("Something went wrong while signing up.");
+  }
+};
+
+
 
   return (
     <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
@@ -93,12 +125,15 @@ export function SignupCard() {
 
             {selectedRole === "therapist" && (
               <div className="grid gap-2">
-                <Label htmlFor="address">Address</Label>
-                <Input
-                  id="address"
-                  name="address"
-                  type="text"
-                  placeholder="Your practice address"
+                <Label htmlFor="availability">Availability Date</Label>
+                <DatePicker
+                  selected={availability}
+                  onChange={(date) => setAvailability(date)}
+                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7B00]"
+                  placeholderText="Select available date"
+                  minDate={new Date()}
+                  showTimeSelect
+                  dateFormat="Pp"
                   required
                 />
               </div>

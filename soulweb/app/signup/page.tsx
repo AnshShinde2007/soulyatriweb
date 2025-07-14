@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SignupCard } from "../../bits/Signupcard";
+import { SignupCard } from "../bits/Signupcard";
 
 export default function SignupPage() {
   return (
