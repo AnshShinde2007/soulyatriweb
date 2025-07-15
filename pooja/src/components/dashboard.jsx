@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import { Home, Calendar, FileText, Settings, Eye } from "lucide-react"
+import { Link, useLocation } from "react-router-dom"
 
 const chartData = [
   { name: "Seeker", value: 34 },
@@ -56,14 +57,14 @@ const inquiryQueue = [
   },
 ]
 
-const sidebarItems = [
-  { icon: Home, label: "Dashboard", active: true },
-  { icon: FileText, label: "Session Records", active: false },
-  { icon: Calendar, label: "Appointments", active: false },
-  { icon: Settings, label: "Settings", active: false },
-]
-
 export default function Dashboard() {
+  const location = useLocation();
+  const sidebarItems = [
+    { icon: Home, label: "Dashboard", to: "/dashboard" },
+    { icon: FileText, label: "Session Records", to: "/session-records" },
+    { icon: Calendar, label: "Appointments", to: "/appointments" },
+    { icon: Settings, label: "Settings", to: "/settings" },
+  ];
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -93,30 +94,31 @@ export default function Dashboard() {
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-[#edf8fe] border-r border-gray-200 min-h-screen flex flex-col justify-between">
+        <aside className="w-64 bg-[#e9f8ff] border-r border-gray-200 min-h-screen flex flex-col justify-between">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-8">
               <Avatar className="w-10 h-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                <AvatarImage src="https://via.placeholder.com/40" />
                 <AvatarFallback className="bg-indigo-100 text-indigo-600">PS</AvatarFallback>
               </Avatar>
               <span className="font-medium text-slate-900">Priya Sharma</span>
             </div>
             <nav className="space-y-2">
               {sidebarItems.map((item, index) => {
-                const IconComponent = item.icon
+                const IconComponent = item.icon;
+                const isActive = location.pathname === item.to;
                 return (
-                  <a
+                  <Link
                     key={index}
-                    href="#"
+                    to={item.to}
                     className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-                      item.active ? "bg-[#9aafec] text-indigo-900" : "text-slate-700 hover:bg-slate-200"
+                      isActive ? "bg-[#8eaff2] text-indigo-900" : "text-slate-700 "
                     }`}
                   >
                     <IconComponent className="w-5 h-5" />
                     <span>{item.label}</span>
-                  </a>
-                )
+                  </Link>
+                );
               })}
             </nav>
           </div>
@@ -144,9 +146,9 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {upcomingSessions.map((session) => (
                     <Card key={session.id} className="overflow-hidden">
-                      <div className={`h-32 ${session.bgColor} flex items-center justify-center`}>
+                      <div className={`h-32 ${session.bgColor ?? "bg-gray-200"} flex items-center justify-center`}>
                         <Avatar className="w-20 h-20">
-                          <AvatarImage src="/placeholder.svg?height=80&width=80" />
+                          <AvatarImage src="https://via.placeholder.com/80" />
                           <AvatarFallback className="text-lg bg-white">
                             {session.name
                               .split(" ")
@@ -169,37 +171,34 @@ export default function Dashboard() {
               {/* Client Inquiry Queue */}
               <section>
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Client Inquiry Queue</h2>
-                <Card>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-[#bac5d3]">
-                        <TableHead className="font-semibold text-slate-900">Client</TableHead>
-                        <TableHead className="font-semibold text-slate-900">Question</TableHead>
-                        <TableHead className="font-semibold text-slate-900">Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
+                <div className="bg-[#e9f8ff] rounded-lg shadow-sm overflow-hidden mb-10">
+                  <table className="w-full text-sm">
+                    <thead className="bg-[#e9f8ff] text-gray-600">
+                      <tr>
+                        <th className="px-6 py-3 text-left">Client</th>
+                        <th className="px-6 py-3 text-left">Question</th>
+                        <th className="px-6 py-3 text-left">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {inquiryQueue.map((inquiry, index) => (
-                        <TableRow key={index}>
-                          <TableCell className="font-medium">{inquiry.client}</TableCell>
-                          <TableCell className="max-w-xs">{inquiry.question}</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={inquiry.status === "Assigned" ? "default" : "secondary"}
-                              className={
-                                inquiry.status === "Assigned"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }
-                            >
+                        <tr key={index}>
+                          <td className="px-6 py-4 font-medium">{inquiry.client}</td>
+                          <td className="px-6 py-4 max-w-xs">{inquiry.question}</td>
+                          <td className="px-6 py-4">
+                            <Badge className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              inquiry.status === "Assigned"
+                                ? "bg-emerald-100 text-emerald-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}>
                               {inquiry.status}
                             </Badge>
-                          </TableCell>
-                        </TableRow>
+                          </td>
+                        </tr>
                       ))}
-                    </TableBody>
-                  </Table>
-                </Card>
+                    </tbody>
+                  </table>
+                </div>
               </section>
             </div>
 
@@ -233,7 +232,7 @@ export default function Dashboard() {
               </Card>
 
               {/* Stats Cards */}
-              <Card className="bg-[#e5e7eb]">
+              <Card className="bg-[#b6c5d4]">
                 <CardContent className="p-6">
                   <div className="text-center">
                     <div className="text-sm text-slate-600 mb-1">Total Client Handled-</div>
@@ -246,7 +245,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#d9dfe7]">
+              <Card className="bg-[#b6c5d4]">
                 <CardContent className="p-6">
                   <div className="text-center">
                     <div className="text-sm text-slate-600 mb-1">Total Upcoming Appointment:</div>

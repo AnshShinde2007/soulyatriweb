@@ -1,7 +1,9 @@
 import { Search, ChevronDown, Home, Calendar, FileText, Settings } from "lucide-react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Link, useLocation } from "react-router-dom"
 
 export default function SessionRecords() {
+  const location = useLocation();
   const sessionData = [
     {
       clientName: "Sophia Carter",
@@ -63,7 +65,7 @@ export default function SessionRecords() {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#edf8fe] border-r border-gray-200 min-h-screen">
+      <aside className="w-64 bg-[#e9f8ff] border-r border-gray-200 min-h-screen">
         <div className="p-6 space-y-8">
           {/* Logo */}
           <div className="flex items-center space-x-2">
@@ -85,24 +87,25 @@ export default function SessionRecords() {
           {/* Navigation */}
           <nav className="space-y-2">
             {[
-              { icon: Home, label: "Dashboard", active: false },
-              { icon: FileText, label: "Session Records", active: true },
-              { icon: Calendar, label: "Appointments", active: false },
-              { icon: Settings, label: "Settings", active: false },
+              { icon: Home, label: "Dashboard", to: "/dashboard" },
+              { icon: FileText, label: "Session Records", to: "/session-records" },
+              { icon: Calendar, label: "Appointments", to: "/appointments" },
+              { icon: Settings, label: "Settings", to: "/settings" },
             ].map((item, index) => {
-              const IconComponent = item.icon
+              const IconComponent = item.icon;
+              const isActive = location.pathname === item.to;
               return (
-                <a
+                <Link
                   key={index}
-                  href="#"
+                  to={item.to}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-                    item.active ? "bg-[#9aafec] text-indigo-900" : "text-slate-700 hover:bg-slate-200"
+                    isActive ? "bg-[#8eaff2] text-indigo-900" : "text-slate-700"
                   }`}
                 >
                   <IconComponent className="w-5 h-5" />
                   <span>{item.label}</span>
-                </a>
-              )
+                </Link>
+              );
             })}
           </nav>
         </div>

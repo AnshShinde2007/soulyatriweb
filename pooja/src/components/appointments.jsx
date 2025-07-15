@@ -3,8 +3,10 @@
 import { useState } from "react"
 import { Search, ChevronLeft, ChevronRight, Home, FileText, Calendar, Settings } from "lucide-react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Link, useLocation } from "react-router-dom"
 
 const AppointmentsDashboard = () => {
+  const location = useLocation();
   const [currentMonth, setCurrentMonth] = useState("July 2024")
   const [nextMonth, setNextMonth] = useState("August 2024")
 
@@ -97,7 +99,7 @@ const AppointmentsDashboard = () => {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#edf8fe] border-r border-gray-200 min-h-screen">
+      <aside className="w-64 bg-[#e9f8ff] border-r border-gray-200 min-h-screen">
         <div className="p-6 space-y-8">
           {/* Logo */}
           <div className="flex items-center space-x-2">
@@ -119,24 +121,25 @@ const AppointmentsDashboard = () => {
           {/* Navigation */}
           <nav className="space-y-2">
             {[
-              { icon: Home, label: "Dashboard", active: false },
-              { icon: FileText, label: "Session Records", active: false },
-              { icon: Calendar, label: "Appointments", active: true },
-              { icon: Settings, label: "Settings", active: false },
+              { icon: Home, label: "Dashboard", to: "/dashboard" },
+              { icon: FileText, label: "Session Records", to: "/session-records" },
+              { icon: Calendar, label: "Appointments", to: "/appointments" },
+              { icon: Settings, label: "Settings", to: "/settings" },
             ].map((item, index) => {
-              const IconComponent = item.icon
+              const IconComponent = item.icon;
+              const isActive = location.pathname === item.to;
               return (
-                <a
+                <Link
                   key={index}
-                  href="#"
+                  to={item.to}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-                    item.active ? "bg-[#9aafec] text-indigo-900" : "text-slate-700 hover:bg-slate-200"
+                    isActive ? "bg-[#8eaff2] text-indigo-900" : "text-slate-700 "
                   }`}
                 >
                   <IconComponent className="w-5 h-5" />
                   <span>{item.label}</span>
-                </a>
-              )
+                </Link>
+              );
             })}
           </nav>
         </div>
@@ -148,12 +151,12 @@ const AppointmentsDashboard = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Appointments</h1>
 
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               placeholder="Search by client name"
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-[#dbdee5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -206,9 +209,9 @@ const AppointmentsDashboard = () => {
         {/* Appointment History */}
         <div>
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Appointment History</h2>
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-[#e9f8ff] rounded-lg shadow-sm overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">Client Name</th>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">Date</th>
@@ -220,7 +223,7 @@ const AppointmentsDashboard = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {appointmentHistory.map((appointment, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
+                  <tr key={index} >
                     <td className="px-6 py-4 text-sm text-gray-800">{appointment.clientName}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{appointment.date}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{appointment.time}</td>
