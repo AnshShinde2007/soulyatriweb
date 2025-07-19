@@ -1,101 +1,90 @@
 "use client";
 
-import { useState } from "react";
-import TherapistBooking from "./therapyuser";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  Home,
+  Briefcase,
+  CalendarDays,
+  BookOpen,
+  Sparkles,
+  Users,
+  Settings,
+} from "lucide-react";
+
+const SOULYATRI_LOGO_PATH = "/assets/Full logo.png";
+const THERAPY_IMAGE_PATH = "/assets/9097fb435c.png";
+const JOURNAL_IMAGE_PATH = "/assets/journal1.png";
+const AROHI_IMAGE_PATH = "/assets/group.png";
+const COMMUNITY_IMAGE_PATH = "/assets/community.png";
+const HEADER_PERSON_IMAGE_PATH = "/assets/FitzMeditation.png";
+const AANYA_AVATAR_PATH = "/assets/aanya-avatar.png";
+
+import TherapySession from "./therapyuser";
 import HealingToolbox from "./healingtoolbox";
-import ClientComponent from "../../Hume/Chat";
 
 const UserDashboard = () => {
-  const [showSoulYatriBot, setShowSoulYatriBot] = useState(false);
-  const [showTherapySession, setShowTherapySession] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState("");
 
-  const MoodDistributionChart = () => {
-    const moodData = [
-      { mood: "Happy", value: 40, color: "#10B981" },
-      { mood: "Calm", value: 30, color: "#3B82F6" },
-      { mood: "Neutral", value: 20, color: "#6B7280" },
-      { mood: "Sad", value: 10, color: "#EF4444" },
-    ];
-
-    const maxValue = Math.max(...moodData.map((d) => d.value));
-
-    return (
-      <div className="h-24 sm:h-32 flex items-end justify-between space-x-2">
-        {moodData.map((item, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center space-y-1 sm:space-y-2 flex-1"
-          >
-            <div
-              className="w-full rounded-t"
-              style={{
-                height: `${(item.value / maxValue) * 80}px`,
-                backgroundColor: item.color,
-              }}
-            />
-            <span className="text-xs text-gray-600">{item.mood}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  useEffect(() => {
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    setCurrentDate(today.toLocaleDateString("en-US", options));
+  }, []);
 
   const MoodTrendChart = () => {
-    const trendData = [4.2, 3.8, 4.1, 4.5, 3.9, 4.3, 4.5];
-    const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
-
     return (
-      <div className="h-24 sm:h-32 relative">
-        <svg width="100%" height="100%" className="overflow-visible">
-          <polyline
-            fill="none"
-            stroke="#3B82F6"
-            strokeWidth="2"
-            points={trendData
-              .map(
-                (value, index) =>
-                  `${(index / (trendData.length - 1)) * 100}%,${100 - (value / 5) * 100}%`,
-              )
-              .join(" ")}
-          />
-          {trendData.map((value, index) => (
-            <circle
-              key={index}
-              cx={`${(index / (trendData.length - 1)) * 100}%`}
-              cy={`${100 - (value / 5) * 100}%`}
-              r="3"
-              fill="#3B82F6"
-            />
-          ))}
-        </svg>
-        <div className="flex justify-between mt-2 text-xs text-gray-600">
-          {weeks.map((week, index) => (
-            <span key={index} className="hidden sm:inline">
-              {week}
-            </span>
-          ))}
+      <div>
+        <div className="flex items-baseline space-x-2 mb-2">
+          <span className="text-4xl font-bold text-gray-800">0.0</span>
+          <span className="text-sm text-gray-500">Last 30 Days</span>
+          <span className="text-sm font-semibold text-green-500">0</span>
+        </div>
+        <div className="w-full h-24 bg-gray-200 rounded-lg flex items-end overflow-hidden">
+          <div className="bg-blue-400 h-1/3 w-1/4 rounded-r-md"></div>
+          <div className="bg-green-400 h-2/3 w-1/4 rounded-r-md ml-1"></div>
+          <div className="bg-yellow-400 h-1/2 w-1/4 rounded-r-md ml-1"></div>
+          <div className="bg-red-400 h-3/4 w-1/4 rounded-r-md ml-1"></div>
         </div>
       </div>
     );
   };
 
   const sidebarItems = [
-    { id: "dashboard", label: "Dashboard", icon: "🏠" },
-    { id: "therapy-sessions", label: "Therapy Sessions", icon: "👩‍⚕️" },
-    { id: "healing-toolbox", label: "Healing Toolbox", icon: "🧰" },
-    { id: "my-sessions", label: "My Sessions", icon: "📅" },
-    { id: "journal", label: "Journal", icon: "📖" },
-    { id: "progress", label: "Progress", icon: "📊" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
-  ];
-
-  const favoriteTools = [
-    { title: "Mindful Breathing", color: "bg-orange-200", icon: "🧘‍♀️" },
-    { title: "Gratitude Journal", color: "bg-orange-100", icon: "📔" },
-    { title: "Sleep Stories", color: "bg-teal-200", icon: "🌙" },
-    { title: "Guided Meditation", color: "bg-gray-200", icon: "🧘‍♂️" },
+    { id: "dashboard", label: "Dashboard", icon: <Home className="h-5 w-5" /> },
+    {
+      id: "healing-toolbox",
+      label: "Healing Toolbox",
+      icon: <Briefcase className="h-5 w-5" />,
+    },
+    {
+      id: "my-sessions",
+      label: "My Sessions",
+      icon: <CalendarDays className="h-5 w-5" />,
+    },
+    { id: "journal", label: "Journal", icon: <BookOpen className="h-5 w-5" /> },
+    {
+      id: "arohi-ai",
+      label: "Arohi AI",
+      icon: <Sparkles className="h-5 w-5" />,
+    },
+    {
+      id: "community",
+      label: "Community",
+      icon: <Users className="h-5 w-5" />,
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: <Settings className="h-5 w-5" />,
+    },
   ];
 
   if (activeTab === "healing-toolbox")
@@ -104,41 +93,32 @@ const UserDashboard = () => {
     return <TherapySession onClose={() => setActiveTab("dashboard")} />;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex overflow-x-hidden">
+    <div className="min-h-screen bg-white flex">
       {/* Sidebar */}
-      <div
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 fixed lg:relative z-50 w-64 bg-white shadow-sm transition-transform duration-300 ease-in-out h-full`}
-      >
-        <div className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-[#FF7B00] to-[#18A2B8] rounded-lg flex items-center justify-center">
-                <span className="text-white text-xs sm:text-sm font-bold">
-                  S
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#FF7B00] to-[#18A2B8] bg-clip-text text-transparent">
-                SoulYatri
-              </span>
-            </div>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-gray-500 hover:text-gray-700"
-            >
-              ✖
-            </button>
+      <div className="p-4 lg:p-6">
+        <div
+          className={`${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 fixed lg:relative z-50
+            w-60 bg-[#E6F6FF] rounded-2xl shadow-md
+            transition-transform duration-300 ease-in-out
+            flex flex-col h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)]
+          `}
+          style={{ top: "1rem", left: "1rem" }}
+        >
+          {/* Logo */}
+          <div className="pt-8 px-6 pb-6">
+            <Image
+              src={SOULYATRI_LOGO_PATH}
+              alt="SoulYatri logo"
+              width={180}
+              height={120}
+              className="object-contain"
+            />
           </div>
 
-          <div className="mb-6 sm:mb-8">
-            <h3 className="font-semibold text-gray-800 text-sm sm:text-base">
-              Aanya
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Healing Streak: 7 days
-            </p>
-          </div>
-
-          <nav className="space-y-2">
+          {/* Navigation */}
+          <nav className="flex-1 px-6 space-y-3">
             {sidebarItems.map((item) => (
               <button
                 key={item.id}
@@ -146,134 +126,198 @@ const UserDashboard = () => {
                   setActiveTab(item.id);
                   setSidebarOpen(false);
                 }}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                  activeTab === item.id
-                    ? "bg-gray-100 text-gray-900"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`w-full flex items-center gap-3 px-4 py-2 text-[15px] font-medium
+                  ${
+                    activeTab === item.id
+                      ? "bg-[#C2C4FF] text-black rounded-full shadow-inner"
+                      : "text-gray-900 hover:bg-[#e4eaff] rounded-md"
+                  }
+                  transition-colors
+                `}
               >
-                <span>{item.icon}</span>
+                {item.icon}
                 <span>{item.label}</span>
               </button>
             ))}
+          </nav>
+
+          {/* Profile & Logout */}
+          <div className="px-6 pt-8 pb-6 border-t border-gray-300">
+            <div className="flex items-center gap-3 mb-5">
+              <Image
+                src={AANYA_AVATAR_PATH}
+                alt="Aanya avatar"
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+              />
+              <span className="font-medium text-gray-900">Aanya</span>
+            </div>
+
             <button
               onClick={() => (window.location.href = "/")}
-              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              className="flex items-center gap-2 text-sm text-gray-800 hover:text-black font-semibold"
             >
-              <span>🚪</span>
-              <span>Logout</span>
+              <span className="text-lg">←</span>
+              Logout
             </button>
-          </nav>
+          </div>
+
+          {/* Mobile close */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0">
-        {/* Header */}
-        <header className="bg-white shadow-sm px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+      <div className="flex-1 min-w-0 flex flex-col bg-white">
+        <header className="relative z-0 bg-white px-6 py-8 flex flex-col sm:flex-row sm:justify-between sm:items-center shadow-sm">
+          <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-gray-500 hover:text-gray-700"
+              className="lg:hidden text-gray-500 hover:text-gray-700 mr-4"
             >
-              ☰
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600 text-sm">Hi Aanya 👋</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                Dashboard
+              </h1>
+              <p className="text-gray-500 text-sm">{currentDate}</p>
             </div>
           </div>
-          <div className="w-10 h-10 bg-gray-300 rounded-full" />
         </header>
 
-        {/* Content Sections */}
-        <div className="p-4 sm:p-8 space-y-8">
-          {/* Healing Progress */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Healing Progress
-            </h2>
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex justify-between mb-2 text-sm font-medium text-gray-700">
-                <span>Overall Progress</span>
-                <span>75%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div
-                  className="bg-blue-500 h-2 rounded-full"
-                  style={{ width: "75%" }}
-                />
-              </div>
-              <p className="text-sm text-gray-600">You're doing great!</p>
-            </div>
-          </section>
-
-          {/* Mood Trackers */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Emotion & Mood Tracker
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className="font-medium text-gray-700 mb-2">
-                  Mood Distribution
-                </h3>
-                <MoodDistributionChart />
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className="font-medium text-gray-700 mb-2">Mood Trend</h3>
-                <MoodTrendChart />
-              </div>
-            </div>
-          </section>
-
-          {/* Summary + Tools + Sentiment */}
-          <section className="space-y-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <p className="text-gray-700">
-                You completed a 'Mindful Breathing' session yesterday and
-                journaled about your day.
+        <div className="flex-1 p-6 space-y-6 overflow-visible">
+          {/* Welcome Banner */}
+          <div className="relative z-30 bg-[#ffe3e3] p-6 rounded-2xl flex items-center justify-between">
+            <div className="relative z-20 max-w-md">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                Hi, Aanya
+              </h2>
+              <p className="text-gray-600">
+                Welcome to a space where your soul is seen, your pain is heard,
+                and your healing begins.
               </p>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {favoriteTools.map((tool, i) => (
-                <div
-                  key={i}
-                  className={`${tool.color} rounded-lg p-4 text-center`}
-                >
-                  <div className="text-3xl mb-2">{tool.icon}</div>
-                  <div className="font-medium text-gray-800">{tool.title}</div>
-                </div>
-              ))}
+            <Image
+              src={HEADER_PERSON_IMAGE_PATH}
+              alt="Meditating person"
+              width={320}
+              height={320}
+              priority
+              className="hidden sm:block absolute -top-5 -right-2 w-56 md:w-64 lg:w-72 object-contain pointer-events-none z-50"
+            />
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">
+            Welcome to the Soul Yatri
+          </h2>
+
+          {/* Content Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div
+              className="bg-white rounded-lg p-6 shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => setActiveTab("therapy-sessions")}
+            >
+              <Image
+                src={THERAPY_IMAGE_PATH}
+                alt="Therapy"
+                width={150}
+                height={120}
+                className="w-full h-32 object-contain mb-4"
+              />
+              <h3 className="text-lg font-semibold text-gray-800">Therapy</h3>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Daily Sentiment Meter
-              </h3>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div
-                  className="bg-blue-500 h-2 rounded-full"
-                  style={{ width: "80%" }}
-                />
-              </div>
-              <p className="text-gray-600">Today's sentiment: 80% Positive</p>
-              <blockquote className="text-sm text-gray-700 italic mt-2">
-                "The mind is everything. What you think you become." – Buddha
-              </blockquote>
+
+            <div
+              className="bg-white rounded-lg p-6 shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => setActiveTab("journal")}
+            >
+              <Image
+                src={JOURNAL_IMAGE_PATH}
+                alt="Journal"
+                width={150}
+                height={120}
+                className="w-full h-32 object-contain mb-4"
+              />
+              <h3 className="text-lg font-semibold text-gray-800">Journal</h3>
+            </div>
+
+            <div
+              className="bg-white rounded-lg p-6 shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => setActiveTab("arohi-ai")}
+            >
+              <Image
+                src={AROHI_IMAGE_PATH}
+                alt="Arohi AI"
+                width={150}
+                height={120}
+                className="w-full h-32 object-contain mb-4"
+              />
+              <h3 className="text-lg font-semibold text-gray-800">Arohi</h3>
+            </div>
+
+            <div
+              className="bg-white rounded-lg p-6 shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => setActiveTab("community")}
+            >
+              <Image
+                src={COMMUNITY_IMAGE_PATH}
+                alt="Community"
+                width={150}
+                height={120}
+                className="w-full h-32 object-contain mb-4"
+              />
+              <h3 className="text-lg font-semibold text-gray-800">Community</h3>
+            </div>
+          </div>
+
+          {/* Mood Trend Section */}
+          <section className="bg-white rounded-lg p-6 shadow-md mt-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Mood Trend
+            </h2>
+            <MoodTrendChart />
+            <div className="flex justify-between mt-4 text-xs text-gray-600">
+              <span>Week 1</span>
+              <span>Week 2</span>
+              <span>Week 3</span>
+              <span>Week 4</span>
             </div>
           </section>
         </div>
       </div>
-
-      {/* Modals */}
-      {showSoulYatriBot && (
-        <ClientComponent accessToken={""} onClose={function (): void {
-          throw new Error("Function not implemented.");
-        } } />
-      )}
-      {showTherapySession && (
-        <TherapistBooking onClose={() => setShowTherapySession(false)} />
-      )}
     </div>
   );
 };

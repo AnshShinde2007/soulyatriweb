@@ -39,22 +39,22 @@ const SigninCard = () => {
         throw new Error(data.detail || "Invalid credentials");
       }
 
-      const { user, access_token } = data;
+      // const { user, access_token } = data;
 
-      // Store info in cookies
-      Cookies.set("email", user.email, { path: "/" });
-      Cookies.set("role", user.role, { path: "/" });
-      Cookies.set("id", user.id, { path: "/" });
-      Cookies.set("token", access_token, { path: "/" }); // optional
+      // // Store info in cookies
+      // Cookies.set("email", user.email, { path: "/" });
+      // Cookies.set("role", user.role, { path: "/" });
+      // Cookies.set("id", user.id, { path: "/" });
+      // Cookies.set("token", access_token, { path: "/" }); // optional
 
       // Redirect by role
-      if (user.role === "admin") {
-        window.location.href = "/admin/dashboard";
-      } else if (user.role === "therapist") {
-        window.location.href = "/therapist/dashboard";
-      } else {
-        window.location.href = "/user/dashboard";
-      }
+      // if (user.role === "admin") {
+      //   window.location.href = "/admin/dashboard";
+      // } else if (user.role === "therapist") {
+      //   window.location.href = "/therapist/dashboard";
+      // } else {
+      //   window.location.href = "/user/dashboard";
+      // }
     } catch (err: any) {
       console.error("Login error:", err);
       setError(err.message || "Login failed. Please check your credentials.");

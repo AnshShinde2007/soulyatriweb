@@ -1,192 +1,355 @@
+// import React from 'react';
+// import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
+// import { DocumentTextIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+
+// // Import the useAuth hook
+// import { useAuth } from '../context/AuthContext';
+
+// // Image assets
+// import therapistImage from '../assets/therapist.png';
+// import arohiImage from '../assets/arohi.png';
+// import soothingImage from '../assets/sentiment.png'; // Confirm naming
+// import miniImage from '../assets/mini.png';
+// import journalImage from '../assets/journal.png';
+// import emotionTrackerImage from '../assets/soothing.png'; // Confirm naming
+
+// type HealingTool = {
+//   id: number;
+//   name: string;
+//   rating: number;
+//   description: string;
+//   buttonText: string;
+//   imageUrl: string;
+//   bgColor: string;
+//   action: () => void;
+// };
+
+// interface HealingToolboxProps {
+//   onNavigate: (route: string) => void;
+// }
+
+// const HealingToolbox: React.FC<HealingToolboxProps> = ({ onNavigate }) => {
+//   const { userProfile, loading } = useAuth(); // Use the useAuth hook
+
+//   const userName = userProfile?.Name || 'there';
+
+//   const healingTools: HealingTool[] = [
+//     {
+//       id: 1,
+//       name: 'Therapist Consultation',
+//       rating: 4.8,
+//       description: 'Take a consultation from the experts now.',
+//       buttonText: 'Consult Now',
+//       imageUrl: therapistImage,
+//       bgColor: '#fff7ef',
+//       action: () => console.log('Navigating to Therapist Consultation...'),
+//     },
+//     {
+//       id: 2,
+//       name: 'Arohi AI',
+//       rating: 4.9,
+//       description: 'Your AI companion for instant support and guidance.',
+//       buttonText: 'Chat Now',
+//       imageUrl: arohiImage,
+//       bgColor: '#e6fcff',
+//       action: () => console.log('Navigating to Arohi AI...'),
+//     },
+//     {
+//       id: 3,
+//       name: 'Soothing Sound Space',
+//       rating: 4.7,
+//       description: 'Relax and unwind with calming soundscapes and music.',
+//       buttonText: 'Listen',
+//       imageUrl: soothingImage,
+//       bgColor: '#fff7ef',
+//       action: () => console.log('Navigating to Soothing Sound Space...'),
+//     },
+//     {
+//       id: 4,
+//       name: 'Mini Meditations',
+//       rating: 4.5,
+//       description: 'Quick guided meditations to center yourself throughout the day.',
+//       buttonText: 'Meditate',
+//       imageUrl: miniImage,
+//       bgColor: '#e6fcff',
+//       action: () => onNavigate('miniMeditation'),
+//     },
+//     {
+//       id: 5,
+//       name: 'Daily Journaling',
+//       rating: 4.6,
+//       description: 'Reflect on your thoughts and emotions with guided prompts.',
+//       buttonText: 'Start Journaling',
+//       imageUrl: journalImage,
+//       bgColor: '#fff7ef',
+//       action: () => console.log('Navigating to Daily Journaling...'),
+//     },
+//     {
+//       id: 6,
+//       name: 'Emotion & Sentiment Tracker',
+//       rating: 4.7,
+//       description: 'Track your emotional well-being and identify patterns.',
+//       buttonText: 'Track Now',
+//       imageUrl: emotionTrackerImage,
+//       bgColor: '#e6fcff',
+//       action: () => console.log('Navigating to Emotion & Sentiment Tracker...'),
+//     },
+//   ];
+
+//   if (loading) return null;
+
+//   return (
+//     <div className="w-full bg-white rounded-3xl shadow-lg">
+//       <div className="mb-8 p-4 lg:p-8">
+//         <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-800 mb-2">
+//           Welcome back, {userName}!
+//         </h1>
+//         <p className="text-gray-600 text-lg mb-4">How are you feeling today?</p>
+
+//         <p className="text-gray-700 text-md mb-2">
+//           You've completed 70% of your healing tools
+//         </p>
+//         <div className="flex items-center mb-6">
+//           <div className="w-full bg-blue-100 rounded-full h-2.5">
+//             <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: '70%' }}></div>
+//           </div>
+//           <span className="ml-3 text-sm font-semibold text-gray-700">70%</span>
+//         </div>
+//       </div>
+
+//       <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4 px-4 lg:px-8">
+//         Healing Toolbox Report
+//       </h2>
+//       <div className="mb-8 p-4 bg-blue-50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between mx-4 lg:mx-8">
+//         <div className="flex items-center mb-3 sm:mb-0">
+//           <DocumentTextIcon className="w-6 h-6 text-indigo-600 mr-3" />
+//           <div>
+//             <h3 className="text-lg font-semibold text-gray-800">Healing_Toolbox_Report.pdf</h3>
+//             <p className="text-sm text-gray-500">1.2MB updated 2 days ago</p>
+//           </div>
+//         </div>
+//         <button
+//           onClick={() => console.log('Preview Report clicked')}
+//           className="flex items-center px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-md hover:bg-indigo-600 transition-colors duration-200 text-sm"
+//         >
+//           <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
+//           Preview
+//         </button>
+//       </div>
+
+//       <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-6 px-4 lg:px-8">
+//         Your Healing Toolbox
+//       </h2>
+
+//       <div className="flex flex-col gap-6 p-4 lg:p-8 pt-0">
+//         {healingTools.map((tool) => (
+//           <div
+//             key={tool.id}
+//             style={{ backgroundColor: tool.bgColor }}
+//             className="w-full p-6 rounded-xl shadow-md flex flex-col sm:flex-row items-center"
+//           >
+//             <div className="flex-1 mb-4 sm:mb-0 sm:mr-6">
+//               <div className="flex items-center mb-2">
+//                 <StarSolidIcon className="w-4 h-4 text-yellow-400 mr-1" />
+//                 <span className="text-gray-700 font-semibold">{tool.rating}</span>
+//               </div>
+//               <h3 className="text-xl font-bold text-gray-800 mb-2">{tool.name}</h3>
+//               <p className="text-gray-600 text-sm mb-4">{tool.description}</p>
+//               <button
+//                 onClick={tool.action}
+//                 className="px-5 py-2 bg-[#2d2c2b] text-white rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-200 text-sm"
+//               >
+//                 {tool.buttonText}
+//               </button>
+//             </div>
+//             <div className="w-full sm:w-auto flex-shrink-0">
+//               <img
+//                 src={tool.imageUrl}
+//                 alt={tool.name}
+//                 className="w-full h-auto sm:w-60 sm:h-36 object-cover rounded-lg shadow-sm"
+//               />
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default HealingToolbox;
 "use client";
+import React from "react";
+import { Star as StarIcon, FileText, Download } from "lucide-react";
 
-import { useState } from "react";
+import therapistImage from "@/public/assets/1.png";
+import arohiImage from "@/public/assets/2.png";
+import soothingImage from "@/public/assets/image.png";
+import miniImage from "../assets/mini.png";
+import journalImage from "../assets/journal.png";
+import emotionTrackerImage from "../assets/soothing.png";
 
-type HealingToolboxProps = {
-  onBack: () => void;
-};
-
-type Tool = {
-  id: string;
-  title: string;
+type HealingTool = {
+  id: number;
+  name: string;
   rating: number;
   description: string;
   buttonText: string;
-  image: string;
+  imageUrl: string;
   bgColor: string;
+  action: () => void;
 };
 
-const HealingToolbox = ({ onBack }: HealingToolboxProps) => {
-  const [selectedMood, setSelectedMood] = useState<string>("");
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+interface HealingToolboxProps {
+  onNavigate: (route: string) => void;
+}
 
-  const quickLinks = [
-    { id: "therapist", label: "Therapist Sessions", icon: "👥" },
-    { id: "astrologer", label: "Astrologer Guidance", icon: "🌙" },
-    { id: "arohi", label: "Arohi AI", icon: "🤖" },
-    { id: "sound", label: "Soothing Sound Space", icon: "🎵" },
-    { id: "meditation", label: "Mini Meditations", icon: "🧘‍♀️" },
-    { id: "journaling", label: "Daily Journaling", icon: "📝" },
-    { id: "emotion", label: "Emotion & Sentiment Tracker", icon: "💝" },
-  ];
-
-  const healingTools: Tool[] = [
+const HealingToolbox: React.FC<HealingToolboxProps> = ({ onNavigate }) => {
+  const healingTools: HealingTool[] = [
     {
-      id: "therapist",
-      title: "Therapist Sessions",
+      id: 1,
+      name: "Therapist Consultation",
       rating: 4.8,
-      description: "Connect with licensed therapists for personalized support.",
-      buttonText: "Book Now",
-      image: "https://your-image-link.com/1.png",
-      bgColor: "bg-orange-100",
+      description: "Take a consultation from the experts now.",
+      buttonText: "Consult Now",
+      imageUrl: therapistImage,
+      bgColor: "#fff7ef",
+      action: () => console.log("Navigating to Therapist Consultation..."),
     },
     {
-      id: "astrologer",
-      title: "Astrologer Guidance",
-      rating: 4.6,
-      description: "Gain insights into your life path with expert astrologers.",
-      buttonText: "Explore",
-      image: "https://your-image-link.com/2.png",
-      bgColor: "bg-blue-100",
-    },
-    {
-      id: "arohi",
-      title: "Arohi AI",
+      id: 2,
+      name: "Arohi AI",
       rating: 4.9,
       description: "Your AI companion for instant support and guidance.",
       buttonText: "Chat Now",
-      image: "https://your-image-link.com/3.png",
-      bgColor: "bg-gray-100",
+      imageUrl: arohiImage,
+      bgColor: "#e6fcff",
+      action: () => console.log("Navigating to Arohi AI..."),
     },
     {
-      id: "sound",
-      title: "Soothing Sound Space",
+      id: 3,
+      name: "Soothing Sound Space",
       rating: 4.7,
       description: "Relax and unwind with calming soundscapes and music.",
       buttonText: "Listen",
-      image: "https://your-image-link.com/4.png",
-      bgColor: "bg-orange-100",
+      imageUrl: soothingImage,
+      bgColor: "#fff7ef",
+      action: () => console.log("Navigating to Soothing Sound Space..."),
     },
     {
-      id: "meditation",
-      title: "Mini Meditations",
+      id: 4,
+      name: "Mini Meditations",
       rating: 4.5,
-      description: "Quick guided meditations to center yourself throughout the day.",
+      description:
+        "Quick guided meditations to center yourself throughout the day.",
       buttonText: "Meditate",
-      image: "https://your-image-link.com/5.png",
-      bgColor: "bg-green-100",
+      imageUrl: miniImage,
+      bgColor: "#e6fcff",
+      action: () => onNavigate("miniMeditation"),
     },
     {
-      id: "journaling",
-      title: "Daily Journaling",
+      id: 5,
+      name: "Daily Journaling",
       rating: 4.6,
       description: "Reflect on your thoughts and emotions with guided prompts.",
       buttonText: "Start Journaling",
-      image: "https://your-image-link.com/6.png",
-      bgColor: "bg-yellow-100",
+      imageUrl: journalImage,
+      bgColor: "#fff7ef",
+      action: () => console.log("Navigating to Daily Journaling..."),
     },
     {
-      id: "emotion",
-      title: "Emotion & Sentiment Tracker",
+      id: 6,
+      name: "Emotion & Sentiment Tracker",
       rating: 4.7,
       description: "Track your emotional well-being and identify patterns.",
       buttonText: "Track Now",
-      image: "https://your-image-link.com/7.png",
-      bgColor: "bg-pink-100",
+      imageUrl: emotionTrackerImage,
+      bgColor: "#e6fcff",
+      action: () => console.log("Navigating to Emotion & Sentiment Tracker..."),
     },
   ];
 
-  const moods = ["Happy", "Calm", "Neutral", "Anxious", "Sad"];
-
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r hidden md:block">
-        <div className="p-6 text-lg font-semibold">Quick Access</div>
-        <ul className="space-y-2 p-4">
-          {quickLinks.map((link) => (
-            <li
-              key={link.id}
-              className="flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg cursor-pointer"
-            >
-              <span>{link.icon}</span>
-              <span>{link.label}</span>
-            </li>
-          ))}
-        </ul>
+    <div className="w-full bg-white rounded-3xl shadow-lg">
+      <div className="mb-8 p-4 lg:p-8">
+        <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-800 mb-2">
+          Welcome back!
+        </h1>
+        <p className="text-gray-600 text-lg mb-4">How are you feeling today?</p>
+
+        <p className="text-gray-700 text-md mb-2">
+          You've completed 70% of your healing tools
+        </p>
+        <div className="flex items-center mb-6">
+          <div className="w-full bg-blue-100 rounded-full h-2.5">
+            <div
+              className="bg-orange-500 h-2.5 rounded-full"
+              style={{ width: "70%" }}
+            ></div>
+          </div>
+          <span className="ml-3 text-sm font-semibold text-gray-700">70%</span>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        {/* Top bar */}
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={onBack}
-            className="text-sm text-blue-600 underline font-medium"
-          >
-            ← Back
-          </button>
-          <button
-            className="md:hidden px-3 py-1 border rounded"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            ☰
-          </button>
-        </div>
-
-        {/* Header */}
-        <h1 className="text-2xl font-bold mb-2">Healing Toolbox</h1>
-        <p className="text-gray-600 mb-6">
-          Discover tools and resources curated to support your emotional and mental well-being.
-        </p>
-
-        {/* Mood Tracker */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">How are you feeling today?</h2>
-          <div className="flex flex-wrap gap-2">
-            {moods.map((mood) => (
-              <button
-                key={mood}
-                className={`px-4 py-2 rounded-full border ${
-                  selectedMood === mood
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-700"
-                }`}
-                onClick={() => setSelectedMood(mood)}
-              >
-                {mood}
-              </button>
-            ))}
+      <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4 px-4 lg:px-8">
+        Healing Toolbox Report
+      </h2>
+      <div className="mb-8 p-4 bg-blue-50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between mx-4 lg:mx-8">
+        <div className="flex items-center mb-3 sm:mb-0">
+          <FileText className="w-6 h-6 text-indigo-600 mr-3" />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800">
+              Healing_Toolbox_Report.pdf
+            </h3>
+            <p className="text-sm text-gray-500">1.2MB updated 2 days ago</p>
           </div>
         </div>
+        <button
+          onClick={() => console.log("Preview Report clicked")}
+          className="flex items-center px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-md hover:bg-indigo-600 transition-colors duration-200 text-sm"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Preview
+        </button>
+      </div>
 
-        {/* Healing Tools */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {healingTools.map((tool) => (
-            <div
-              key={tool.id}
-              className={`rounded-lg shadow-md overflow-hidden ${tool.bgColor}`}
-            >
-              <img
-                src={tool.image}
-                alt={tool.title}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-1">{tool.title}</h3>
-                <p className="text-sm text-gray-700 mb-2">{tool.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-yellow-600">
-                    ⭐ {tool.rating}
-                  </span>
-                  <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600">
-                    {tool.buttonText}
-                  </button>
-                </div>
+      <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-6 px-4 lg:px-8">
+        Your Healing Toolbox
+      </h2>
+
+      <div className="flex flex-col gap-6 p-4 lg:p-8 pt-0">
+        {healingTools.map((tool) => (
+          <div
+            key={tool.id}
+            style={{ backgroundColor: tool.bgColor }}
+            className="w-full p-6 rounded-xl shadow-md flex flex-col sm:flex-row items-center"
+          >
+            <div className="flex-1 mb-4 sm:mb-0 sm:mr-6">
+              <div className="flex items-center mb-2">
+                <StarIcon className="w-4 h-4 text-yellow-400 mr-1" />
+                <span className="text-gray-700 font-semibold">
+                  {tool.rating}
+                </span>
               </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                {tool.name}
+              </h3>
+              <p className="text-gray-600 text-sm mb-4">{tool.description}</p>
+              <button
+                onClick={tool.action}
+                className="px-5 py-2 bg-[#2d2c2b] text-white rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-200 text-sm"
+              >
+                {tool.buttonText}
+              </button>
             </div>
-          ))}
-        </div>
+            <div className="w-full sm:w-auto flex-shrink-0">
+              <img
+                src={tool.imageUrl}
+                alt={tool.name}
+                className="w-full h-auto sm:w-60 sm:h-36 object-cover rounded-lg shadow-sm"
+              />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
