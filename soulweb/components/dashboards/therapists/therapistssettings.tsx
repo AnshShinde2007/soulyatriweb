@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
 
 interface TherapistSettingsProps {
   onBack?: () => void;

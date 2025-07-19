@@ -23,54 +23,52 @@ export function SignupCard() {
   const [availability, setAvailability] = useState<Date | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const form = e.currentTarget;
-  const formData = new FormData(form);
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
-
-  const payload: any = {
-    name: formData.get("name"),
-    email: formData.get("email"),
-    role: selectedRole,
-    password: password,
-  };
-
-  if (selectedRole === "therapist" && availability) {
-    payload.availability = availability.toISOString(); // Include availability if therapist
-  }
-
-  try {
-    const response = await fetch("http://localhost:8000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      alert(`Signup failed: ${err.detail || "Unknown error"}`);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
       return;
     }
 
-    const data = await response.json();
-    console.log("Signup success:", data);
-    router.push("/dashboard"); // Or to login page
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("Something went wrong while signing up.");
-  }
-};
+    const payload: any = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      role: selectedRole,
+      password: password,
+    };
 
+    if (selectedRole === "therapist" && availability) {
+      payload.availability = availability.toISOString(); // Include availability if therapist
+    }
 
+    try {
+      const response = await fetch("http://localhost:8000/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        alert(`Signup failed: ${err.detail || "Unknown error"}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Signup success:", data);
+      router.push("/dashboard"); // Or to login page
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("Something went wrong while signing up.");
+    }
+  };
 
   return (
     <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
@@ -98,12 +96,24 @@ export function SignupCard() {
           <div className="flex flex-col gap-3">
             <div className="grid gap-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input id="name" name="name" type="text" placeholder="Your full name" required />
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Your full name"
+                required
+              />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                required
+              />
             </div>
 
             <div className="grid gap-2">
@@ -141,12 +151,24 @@ export function SignupCard() {
 
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" placeholder="Create password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Create password"
+                required
+              />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required />
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm password"
+                required
+              />
             </div>
           </div>
 

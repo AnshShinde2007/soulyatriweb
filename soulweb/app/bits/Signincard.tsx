@@ -36,21 +36,21 @@ const SigninCard = () => {
       console.log("Login Response:", data);
 
       if (!response.ok) {
-        console.error("Login failed:", data);
         throw new Error(data.detail || "Invalid credentials");
       }
 
-      // ✅ No access_token returned — skip token handling
-      // You may manually set a token here if needed
-      Cookies.set("email", data.email, { path: "/" });
-      Cookies.set("role", data.role, { path: "/" });
-      Cookies.set("id", data.id, { path: "/" });
+      const { user, access_token } = data;
 
-      // ✅ Redirect based on role
-      const role = data.role;
-      if (role === "admin") {
+      // Store info in cookies
+      Cookies.set("email", user.email, { path: "/" });
+      Cookies.set("role", user.role, { path: "/" });
+      Cookies.set("id", user.id, { path: "/" });
+      Cookies.set("token", access_token, { path: "/" }); // optional
+
+      // Redirect by role
+      if (user.role === "admin") {
         window.location.href = "/admin/dashboard";
-      } else if (role === "therapist") {
+      } else if (user.role === "therapist") {
         window.location.href = "/therapist/dashboard";
       } else {
         window.location.href = "/user/dashboard";

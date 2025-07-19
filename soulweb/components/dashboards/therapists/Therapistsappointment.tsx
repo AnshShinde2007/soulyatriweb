@@ -21,7 +21,9 @@ interface Appointment {
 
 const TherapistsAppointment = ({ onBack }: TherapistsAppointmentProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState<number | null>(null);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<
+    number | null
+  >(null);
 
   const appointments: Appointment[] = [
     {
@@ -57,7 +59,7 @@ const TherapistsAppointment = ({ onBack }: TherapistsAppointmentProps) => {
   ];
 
   const filteredAppointments = appointments.filter((appt) =>
-    appt.clientName.toLowerCase().includes(searchTerm.toLowerCase())
+    appt.clientName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleSelectAppointment = (id: number): void => {
@@ -66,10 +68,12 @@ const TherapistsAppointment = ({ onBack }: TherapistsAppointmentProps) => {
 
   const handleViewDetails = (): void => {
     if (selectedAppointmentId !== null) {
-      const appointment = appointments.find((appt) => appt.id === selectedAppointmentId);
+      const appointment = appointments.find(
+        (appt) => appt.id === selectedAppointmentId,
+      );
       if (appointment) {
         alert(
-          `Client: ${appointment.clientName}\nDate: ${appointment.date}\nTime: ${appointment.time}\nStatus: ${appointment.status}\nMode: ${appointment.mode}\nSessions: ${appointment.sessionCount}\nNotes: ${appointment.notes}`
+          `Client: ${appointment.clientName}\nDate: ${appointment.date}\nTime: ${appointment.time}\nStatus: ${appointment.status}\nMode: ${appointment.mode}\nSessions: ${appointment.sessionCount}\nNotes: ${appointment.notes}`,
         );
       }
     }
@@ -90,12 +94,16 @@ const TherapistsAppointment = ({ onBack }: TherapistsAppointmentProps) => {
           <div
             key={appt.id}
             className={`p-4 rounded-lg shadow-sm border ${
-              selectedAppointmentId === appt.id ? "border-blue-500" : "border-gray-300"
+              selectedAppointmentId === appt.id
+                ? "border-blue-500"
+                : "border-gray-300"
             }`}
             onClick={() => handleSelectAppointment(appt.id)}
           >
             <p className="font-semibold">{appt.clientName}</p>
-            <p className="text-sm text-gray-600">{appt.date} at {appt.time}</p>
+            <p className="text-sm text-gray-600">
+              {appt.date} at {appt.time}
+            </p>
             <p className="text-sm">Status: {appt.status}</p>
             <p className="text-sm">Mode: {appt.mode}</p>
           </div>
@@ -103,7 +111,10 @@ const TherapistsAppointment = ({ onBack }: TherapistsAppointmentProps) => {
       </div>
 
       <div className="mt-6 flex gap-4">
-        <Button onClick={handleViewDetails} disabled={selectedAppointmentId === null}>
+        <Button
+          onClick={handleViewDetails}
+          disabled={selectedAppointmentId === null}
+        >
           View Details
         </Button>
         {onBack && (

@@ -267,7 +267,9 @@ const UserDashboard = () => {
 
       {/* Modals */}
       {showSoulYatriBot && (
-        <ClientComponent />
+        <ClientComponent accessToken={""} onClose={function (): void {
+          throw new Error("Function not implemented.");
+        } } />
       )}
       {showTherapySession && (
         <TherapistBooking onClose={() => setShowTherapySession(false)} />

@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from typing import List
 from firebase_admin import credentials, firestore, initialize_app, auth
 from jose import jwt, JWTError
-from passlib.hash import bcrypt
 from dotenv import load_dotenv
+import hashlib
 import os
 
 # Load environment variables
@@ -32,6 +32,14 @@ SECRET_KEY = os.getenv("SECRET_KEY", "soul_yatri_secret")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
+# Password Hashing Utils
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return hash_password(plain_password) == hashed_password
+
+# JWT Token Generation & Verification
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -54,7 +62,7 @@ async def signup(user: User):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    hashed_pw = bcrypt.hash(user.password)
+    hashed_pw = hash_password(user.password)
     user_data = user.dict()
     user_data["password"] = hashed_pw
     new_user_ref = users_ref.document()
@@ -70,7 +78,7 @@ async def login(request: LoginRequest):
 
     user_doc = result[0]
     user_data = user_doc.to_dict()
-    if not bcrypt.verify(request.password, user_data["password"]):
+    if not verify_password(request.password, user_data["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token_data = {"sub": user_doc.id, "email": user_data["email"], "role": user_data["role"]}
