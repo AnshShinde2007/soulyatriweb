@@ -1,13 +1,1 @@
-{
-  "type": "service_account",
-  "project_id": "soul-yatri",
-  "private_key_id": "2efc73739d838f51fbcce7feb79809cfd780421e",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCgevLRflly5SZI\nv/2ewUd9Kki9llqYfyHMvtDAnLpflYEvoRGzvTNjoqklLPpfCyclDzQ4mcqGL106\nWZgLSLBVHi2HusFvD2txiX6WVxw/mCta6T4aNM7b4OdXTQuZqHRfXtkJXw6aLqvG\nFIwRa9ulan6fY8ntpTJlER0So7SdSN3h5meInlXk8NrnEldX+kyY82daok6JfRug\nrMR5InxEdrdCfz8cs4a6aRbnk+dRVXNBF1wnO7fb4giHhlSsZBatrtXFMmKScrr8\n9CKd1jtdtt7+H1Dp4dM7dLO1ax5n/JEj4suWauwX16VcaNsJfRwoGAwbmLyJHnzh\nQdOXxO3hAgMBAAECgf9CKm8MpDHwU6QCDfNdQTnFOwN19EfmGB5Kpi64brMCnEgA\n6A5XmeqJafqgGUTuN7fFnKWRsKPC/ERNiol/ULj8xZrmgb/yZA+PAEfxAUZKvuXu\nCO/rkVpSNEH6ljy+93VqECRSeNH/plgSxn+TSNhTm1TmfEsFPT2wVFE1HjBmdSPJ\nqiuEggNsFzK/qzvqpRodBqcZmHlwLTxSeI8p1TOYf57hzksRA6W8qyipa00PTMWq\nwMh60Vrr8ySArD4EsthHkHeDr/CmWONm2ShNB96bVU6IniapH8YkU6GxOFoExsYu\n4X8JmI9M+YavQD76WuvEZ0ACUzxdBFYfLUkrfcECgYEA0cM+sBODhqiYaGQpJZwR\nsbAYPnHiC+n+b5GUI+fz6ZCDxknmRsvlFsBTZjbADyguzs40MWbmPolE0CMjYVCq\nKTb0y24HSa3pli6A5vLa/qVe91+DQSdlKeJfKHI1IXsdiMca9DDD6yqDVFmdnRvq\nANFfwNkiyK6gpRpfpL0GCVECgYEAw9q7tRMsMnuEayPLSFNN0fIgPo2ufu7sfAn8\nqLrq/VnYdwVjTroM24o8Q5iBeKbIs88cxQw/E1xNwQ6ckOip41SBqKYa1hrGK9ey\n/6Q4EJu3jbfGLeMMKSCSJu06ATJpayyA09X3iIO9wYbKcKt62wL8KcJWzHgDmpAo\nn0d1d5ECgYApL7DrWamFkyz5slDx9Ybz4KOh/zJnLHas6WSw+CZIQfvdvzzbwcUl\nhnXZp/5l+3nVWV+eI5opxUIhrASSYwhGN2gxWVVM/jzTJCZjMmQVg9r1r2dSL64J\nX01X37TW8hmGdbGxKLIPRrWqpj3wTz7PEk0+zGOsC723LUqCSisZQQKBgGFlkjkv\nKqiEMkrRhxMVkjqYrR5OePtYt7PLh6ElKx0IpBQ0Urlg3moC6Ys3+RLV5jM9CPKY\n73kiSux55rRNb8bETKJg0DGvKOO+pZ5pvRPNTE+ml2BUa8S8FNJU4Kadujz46avu\n2OVDlob6EAxNyo/FgT8HDQEroacoj3r+H1VxAoGBAKZyNxds8ejYJ8Xht+w7iASi\nSjDlNsVcaCqWfIl41nWj2nYrz4KhVsDVj9X3XV6Yd5mdqiesPrzTPw6TnHze0wlV\nNnHvmfzGzKOvTnst/BF9dXadWiNk5zdw+u0by15RcoV8B19bhip67GW3712KGhZO\n7YmG+LXlCFA/c8p48G16\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-fbsvc@soul-yatri.iam.gserviceaccount.com",
-  "client_id": "115286392220071927777",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40soul-yatri.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+
